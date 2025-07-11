@@ -13,8 +13,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
-
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,13 +23,16 @@ import java.util.List;
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
-    @Autowired private MockMvc mockMvc;
-    @MockBean private UserService userService;
-    @Autowired private ObjectMapper objectMapper;
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private UserService userService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private final UserDTO mockUser = UserDTO.builder()
             .id(1L).name("Petr").email("petr@mail.com").age(25).build();
-
 
     @Test
     void shouldReturnUser() throws Exception {
@@ -60,20 +61,20 @@ class UserControllerTest {
                 .andExpect(jsonPath("$[0].name").value("Petr"));
     }
 
-    @Test
-    void shouldUpdateUser() throws Exception {
-        when(userService.update(eq(1L), any())).thenReturn(mockUser);
-        mockMvc.perform(put("/api/users/1")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(mockUser)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.age").value(25));
-    }
+        @Test
+        void shouldUpdateUser () throws Exception {
+            when(userService.update(eq(1L), any())).thenReturn(mockUser);
+            mockMvc.perform(put("/api/users/1")
+                            .contentType("application/json")
+                            .content(objectMapper.writeValueAsString(mockUser)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.age").value(25));
+        }
 
-    @Test
-    void shouldDeleteUser() throws Exception {
-        doNothing().when(userService).delete(1L);
-        mockMvc.perform(delete("/api/users/1"))
-                .andExpect(status().isNoContent());
+        @Test
+        void shouldDeleteUser () throws Exception {
+            doNothing().when(userService).delete(1L);
+            mockMvc.perform(delete("/api/users/1"))
+                    .andExpect(status().isNoContent());
+        }
     }
-}

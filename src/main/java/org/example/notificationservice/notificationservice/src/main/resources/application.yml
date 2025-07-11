@@ -1,0 +1,23 @@
+spring:
+
+  application:
+    name: notification-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  mail:
+    host: smtp.ethereal.email
+    port: 587
+    username: meggie.lebsack22@ethereal.email
+    password: kcRSFffcJfhQeQpan7
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+server:
+    port: 8082
