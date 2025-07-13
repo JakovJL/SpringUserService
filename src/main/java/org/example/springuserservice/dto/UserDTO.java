@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * DTO используется для передачи данных между слоями приложения
@@ -12,7 +13,7 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO {
+public class UserDTO extends RepresentationModel<UserDTO> {
     /**
      * Уникальный идентификатор пользователя
      * Генерируется автоматически при создании
