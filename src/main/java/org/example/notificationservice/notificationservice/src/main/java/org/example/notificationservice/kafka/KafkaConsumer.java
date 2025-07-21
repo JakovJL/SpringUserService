@@ -1,21 +1,17 @@
 package org.example.notificationservice.kafka;
 
 import org.example.notificationservice.dto.NotificationMessage;
+import org.example.notificationservice.service.EmailSender;
 import org.example.notificationservice.service.EmailService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaConsumer {
-    private final EmailService emailService;
+    private final EmailSender emailSender;
 
-    /**
-     * Конструктор с внедрением зависимостей.
-     *
-     * @param emailService  сервис отправки email
-     */
-    public KafkaConsumer(EmailService emailService) {
-        this.emailService = emailService;
+    public KafkaConsumer(EmailSender emailSender) {
+        this.emailSender = emailSender;
     }
 
     /**
@@ -29,14 +25,11 @@ public class KafkaConsumer {
             NotificationMessage notification = parseMessage(message);
 
             String subject = "Уведомление от сервиса";
-            String text;
-            if (notification.getAction().equals("create")) {
-                text = "Здравствуйте! Ваш аккаунт на сайте ваш сайт был успешно создан.";
-            } else {
-                text = "Здравствуйте! Ваш аккаунт был удалён.";
-            }
+            String text = notification.getAction().equals("create")
+                    ? "Здравствуйте! Ваш аккаунт на сайте ваш сайт был успешно создан."
+                    : "Здравствуйте! Ваш аккаунт был удалён.";
 
-            emailService.sendEmail(notification.getEmail(), subject, text);
+            emailSender.sendEmail(notification.getEmail(), subject, text);
         } catch (Exception e) {
             e.printStackTrace();
         }
