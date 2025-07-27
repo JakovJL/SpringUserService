@@ -2,12 +2,29 @@ version: '3.8'
 
 services:
 
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   discovery-service:
     build: ./discoveryservice
     ports:
-      - "8761:8761"
+      - "${DISCOVERY_PORT}:${DISCOVERY_PORT}"
     healthcheck:
-      test: curl --fail http://localhost:8761/eureka || exit 1
+      test: curl --fail http://localhost:${DISCOVERY_PORT}/eureka || exit 1
       interval: 10s
       retries: 5
       start_period: 15s
@@ -15,12 +32,12 @@ services:
   config-server:
     build: ./configserver
     ports:
-      - "8888:8888"
+      - "${CONFIG_PORT}:${CONFIG_PORT}"
     depends_on:
       discovery-service:
         condition: service_healthy
     healthcheck:
-      test: curl --fail http://localhost:8888/actuator/health || exit 1
+      test: curl --fail http://localhost:${CONFIG_PORT}/actuator/health || exit 1
       interval: 10s
       retries: 5
       start_period: 20s
@@ -28,8 +45,13 @@ services:
   userservice:
     build: ./userservice
     ports:
-      - "8081:8081"
+      - "${USER_PORT}:${USER_PORT}"
+    environment:
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
+      postgres:
+        condition: service_healthy
       config-server:
         condition: service_healthy
       discovery-service:
@@ -38,19 +60,26 @@ services:
   notificationservice:
     build: ./notificationservice
     ports:
-      - "8082:8082"
+      - "${NOTIFICATION_PORT}:${NOTIFICATION_PORT}"
+    environment:
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       userservice:
         condition: service_started
+      postgres:
+        condition: service_healthy
       config-server:
         condition: service_healthy
       discovery-service:
         condition: service_healthy
+      kafka:
+        condition: service_started
 
   api-gateway:
     build: ./apigateway
     ports:
-      - "8080:8080"
+      - "${GATEWAY_PORT}:${GATEWAY_PORT}"
     depends_on:
       userservice:
         condition: service_started
@@ -64,22 +93,25 @@ services:
   zookeeper:
     image: bitnami/zookeeper:latest
     ports:
-      - "2181:2181"
+      - "${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
     image: bitnami/kafka:latest
     ports:
-      - "9092:9092"
+      - "${KAFKA_PORT}:${KAFKA_PORT}"
     environment:
       - KAFKA_CFG_PROCESS_ROLES=broker,controller
       - KAFKA_CFG_NODE_ID=1
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:${KAFKA_PORT},CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:${KAFKA_PORT}
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
+
+volumes:
+  postgres_data:

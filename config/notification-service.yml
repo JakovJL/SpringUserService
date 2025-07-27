@@ -1,0 +1,14 @@
+server:
+  port: 8082
+
+spring:
+  mail:
+    host: smtp.ethereal.email
+    port: 587
+    username: meggie.lebsack22@ethereal.email
+    password: kcRSFffcJfhQeQpan7
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
