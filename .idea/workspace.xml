@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="010fd1f2-e6b7-4462-ab11-9a1212e84ff2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apigateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/apigateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configserver/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/configserver/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/discoveryservice/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/discoveryservice/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notificationservice/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/notificationservice/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notificationservice/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notificationservice/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apigateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/apigateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api-gateway.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/apigateway.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/notification-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/notificationservice.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/user-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/userservice.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,7 +278,7 @@
       <workItem from="1753574151189" duration="105000" />
       <workItem from="1753574266154" duration="775000" />
       <workItem from="1753575104945" duration="2737000" />
-      <workItem from="1753644388730" duration="11222000" />
+      <workItem from="1753644388730" duration="12358000" />
     </task>
     <servers />
   </component>
